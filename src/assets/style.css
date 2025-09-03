@@ -1,1 +1,17 @@
 @import 'tailwindcss';
+
+@font-face {
+   font-family: Mozilla_Text;
+   src: url(fonts/MozillaText/MozillaText-Variable.woff2);
+   font-display: swap;
+}
+@font-face {
+   font-family: Mozilla_Headline;
+   src: url(fonts/MozillaHeadline/MozillaHeadline-Variable.woff2);
+   font-display: swap;
+}
+
+@theme {
+   --font-mozilla: Mozilla_Text, var(--font-sans);
+   --font-mozilla-headline: Mozilla_Headline, var(--font-sans);
+}
