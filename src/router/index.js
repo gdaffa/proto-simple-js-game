@@ -4,7 +4,7 @@ const routes = [
    {
       name: 'Main Page',
       path: '/',
-      component: 'MainPage.vue',
+      component: 'MainPage',
    },
 ]
 
@@ -12,7 +12,7 @@ const router = createRouter({
    history: createWebHistory(import.meta.env.BASE_URL),
    routes: routes.map((route) => ({
       ...route,
-      component: import(`/src/components/contents/${route.component}`),
+      component: () => import(`../components/contents/${route.component}.vue`),
    })),
 })
 
