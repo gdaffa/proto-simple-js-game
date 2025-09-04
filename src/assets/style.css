@@ -15,3 +15,9 @@
    --font-mozilla: Mozilla_Text, var(--font-sans);
    --font-mozilla-headline: Mozilla_Headline, var(--font-sans);
 }
+
+@layer components {
+   .h1 {
+      @apply font-mozilla-headline text-5xl font-bold;
+   }
+}
