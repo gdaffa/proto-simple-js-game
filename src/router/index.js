@@ -6,6 +6,16 @@ const routes = [
       path: '/',
       component: 'MainPage',
    },
+   {
+      name: 'Contribute',
+      path: '/contribute',
+      component: 'ContributePage',
+   },
+   {
+      name: 'About',
+      path: '/about',
+      component: 'AboutPage',
+   },
 ]
 
 const router = createRouter({
