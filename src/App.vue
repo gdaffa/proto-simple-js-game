@@ -35,7 +35,7 @@ const mainPageClass = {
       class="float-right transition-all duration-400"
       :class="[mainPageClass[isSidebarOpen ? 'sidebarOpen' : 'sidebarClose']]"
    >
-      <main class="w-250 mx-auto max-w-full box-border pt-6">
+      <main class="w-262 mx-auto max-w-full box-border p-6 mt-15 md:mt-0">
          <RouterView />
       </main>
    </div>
