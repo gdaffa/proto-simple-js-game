@@ -47,7 +47,7 @@ const computedPages = computed(() =>
       let selected = page.path == route.path
       return {
          ...page,
-         selected,
+         classes: { 'text-zinc-50 bg-sky-700': selected },
          icon: `solar:${page.icon}-${selected ? 'bold' : 'broken'}`,
       }
    }),
@@ -75,19 +75,19 @@ const navClass = {
 }
 const hamburgerClass = {
    close: [
+      'text-zinc-400',
       // mobile
       'left-full',
       'ml-6',
-      'text-zinc-400',
       // desktop
       'md:left-0',
       'md:ml-0',
    ],
    open: [
+      'text-zinc-200',
       // mobile
       'left-0',
       'ml-0',
-      'text-zinc-200',
       // desktop
       'md:left-0',
       'md:ml-0',
@@ -102,7 +102,7 @@ const hamburgerClass = {
       @mouseleave="isOpenWhenHover = true"
    >
       <div
-         class="sidebar__item aspect-square w-min gap-0 relative duration-400"
+         class="sidebar__item aspect-square w-min gap-0 relative duration-400 hover:text-zinc-50"
          :class="[
             hamburgerClass[isSidebarOpen ? 'open' : 'close'],
             { 'text-zinc-300': isSidebarOpen },
@@ -117,10 +117,7 @@ const hamburgerClass = {
       <hr class="mb-3 border-zinc-900 border-1" />
       <ul>
          <li v-for="(page, i) of computedPages" :key="i">
-            <RouterLink
-               :to="page.path"
-               class="sidebar__item"
-               :class="{ sidebar__item_selected: page.selected }"
+            <RouterLink :to="page.path" class="sidebar__item" :class="page.classes"
                ><Icon :icon="page.icon" class="text-2xl" />
                <div>{{ page.name }}</div></RouterLink
             >
