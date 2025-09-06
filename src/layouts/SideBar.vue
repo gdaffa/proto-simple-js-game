@@ -61,7 +61,7 @@ const navClass = {
       'w-dvw',
       'ml-[-100%]',
       // desktop
-      'md:w-18',
+      'md:w-sidebar-close',
       'md:ml-0',
    ],
    open: [
@@ -69,13 +69,13 @@ const navClass = {
       'w-dvw',
       'ml-0',
       // desktop
-      'md:w-55',
+      'md:w-sidebar-open',
       'md:ml-0',
    ],
 }
 const hamburgerClass = {
    close: [
-      'text-zinc-400',
+      'text-zinc-500',
       // mobile
       'left-full',
       'ml-6',
@@ -84,7 +84,7 @@ const hamburgerClass = {
       'md:ml-0',
    ],
    open: [
-      'text-zinc-200',
+      'text-zinc-300',
       // mobile
       'left-0',
       'ml-0',
@@ -97,16 +97,16 @@ const hamburgerClass = {
 
 <template>
    <nav
-      class="bg-zinc-950 h-dvh fixed p-3 text-zinc-400 group transition-all duration-400"
-      :class="[navClass[isSidebarOpen ? 'open' : 'close'], { 'md:hover:w-55': isOpenWhenHover }]"
+      class="bg-zinc-950 h-dvh fixed p-3 group transition-all duration-400"
+      :class="[
+         navClass[isSidebarOpen ? 'open' : 'close'],
+         { 'md:hover:w-sidebar-open': isOpenWhenHover },
+      ]"
       @mouseleave="isOpenWhenHover = true"
    >
       <div
-         class="sidebar__item aspect-square w-min gap-0 relative duration-400 hover:text-zinc-50"
-         :class="[
-            hamburgerClass[isSidebarOpen ? 'open' : 'close'],
-            { 'text-zinc-300': isSidebarOpen },
-         ]"
+         class="sidebar__item aspect-square w-min gap-0 relative duration-400 hover:text-zinc-100"
+         :class="[hamburgerClass[isSidebarOpen ? 'open' : 'close']]"
          @click="toggleSidebar"
       >
          <Icon

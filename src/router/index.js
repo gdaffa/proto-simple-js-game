@@ -2,19 +2,19 @@ import { createWebHistory, createRouter } from 'vue-router'
 
 const routes = [
    {
-      name: 'Main Page',
+      name: 'Game',
       path: '/',
-      component: 'MainPage',
+      component: 'GameView',
    },
    {
       name: 'Contribute',
       path: '/contribute',
-      component: 'ContributePage',
+      component: 'ContributeView',
    },
    {
       name: 'About',
       path: '/about',
-      component: 'AboutPage',
+      component: 'AboutView',
    },
 ]
 
@@ -22,7 +22,7 @@ const router = createRouter({
    history: createWebHistory(import.meta.env.BASE_URL),
    routes: routes.map((route) => ({
       ...route,
-      component: () => import(`../components/contents/${route.component}.vue`),
+      component: () => import(`../contents/${route.component}.vue`),
    })),
 })
 

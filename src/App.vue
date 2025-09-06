@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterView } from 'vue-router'
-import SideBar from '@/components/SideBar.vue'
+import SideBar from '@/layouts/SideBar.vue'
 
 // =============================================================================
 
@@ -18,21 +18,25 @@ const mainPageClass = {
       // mobile
       'w-dvw',
       // desktop
-      'md:w-dvw',
+      'md:w-[calc(100dvw-var(--spacing-sidebar-close))]',
    ],
    sidebarOpen: [
       // mobile
       'w-dvw',
       // desktop
-      'md:w-[calc(100dvw-var(--spacing)*55)]',
+      'md:w-[calc(100dvw-var(--spacing-sidebar-open))]',
    ],
 }
 </script>
 
 <template>
-   <SideBar @openSidebar="openSidebar" :isSidebarOpen="isSidebarOpen"></SideBar>
-   <RouterView
+   <SideBar @openSidebar="openSidebar" :isSidebarOpen="isSidebarOpen" />
+   <div
       class="float-right transition-all duration-400"
       :class="[mainPageClass[isSidebarOpen ? 'sidebarOpen' : 'sidebarClose']]"
-   ></RouterView>
+   >
+      <main class="w-250 mx-auto max-w-full box-border pt-6">
+         <RouterView />
+      </main>
+   </div>
 </template>
