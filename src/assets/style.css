@@ -23,28 +23,9 @@
       @apply font-mozilla-headline text-4xl font-bold text-zinc-100;
    }
 
-   .sidebar_open {
-      @apply w-dvw ml-0 md:w-sidebar-open md:ml-0;
-   }
-   .sidebar_close {
-      @apply w-dvw ml-[-100%] md:w-sidebar-close md:ml-0;
-   }
-   .sidebar__hamburger_open {
-      @apply text-zinc-300 left-0 ml-0 md:left-0 md:ml-0;
-   }
-   .sidebar__hamburger_close {
-      @apply text-zinc-500 left-full ml-6 md:left-0 md:ml-0;
-   }
    .sidebar__item {
       @apply bg-zinc-900 p-3 mb-3 rounded-md grid items-center gap-4 font-medium
          relative grid-cols-[min-content_1fr] overflow-hidden transition-all
          duration-200 text-zinc-500 hover:text-zinc-100;
-   }
-
-   .main_sidebar-open {
-      @apply w-dvw md:w-[calc(100dvw-var(--spacing-sidebar-open))];
-   }
-   .main_sidebar-close {
-      @apply w-dvw md:w-[calc(100dvw-var(--spacing-sidebar-close))];
    }
 }

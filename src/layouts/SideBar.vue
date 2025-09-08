@@ -56,14 +56,14 @@ const computedPages = computed(() =>
 // =============================================================================
 
 const $sidebar = computed(() => ({
-   sidebar_open: props.isSidebarOpen,
-   sidebar_close: !props.isSidebarOpen,
+   'w-dvw ml-0 md:w-sidebar-open md:ml-0': props.isSidebarOpen,
+   'w-dvw ml-[-100%] md:w-sidebar-close md:ml-0': !props.isSidebarOpen,
    'md:hover:w-sidebar-open': isOpenWhenHover.value,
 }))
 
 const $hamburger = computed(() => ({
-   sidebar__hamburger_open: props.isSidebarOpen,
-   sidebar__hamburger_close: !props.isSidebarOpen,
+   'text-zinc-300 left-0 ml-0 md:left-0 md:ml-0': props.isSidebarOpen,
+   'text-zinc-500 left-full ml-6 md:left-0 md:ml-0': !props.isSidebarOpen,
 }))
 </script>
 
@@ -81,15 +81,15 @@ const $hamburger = computed(() => ({
          <Icon
             :icon="`solar:hamburger-menu${isSidebarOpen ? '-linear' : '-broken'}`"
             class="text-2xl"
-         ></Icon>
+         />
       </div>
       <hr class="mb-3 border-zinc-900 border-1" />
       <ul>
          <li v-for="(page, i) of computedPages" :key="i">
-            <RouterLink :to="page.path" class="sidebar__item" :class="page.classes"
-               ><Icon :icon="page.icon" class="text-2xl" />
-               <div>{{ page.name }}</div></RouterLink
-            >
+            <RouterLink :to="page.path" class="sidebar__item" :class="page.classes">
+               <Icon :icon="page.icon" class="text-2xl" />
+               <span>{{ page.name }}</span>
+            </RouterLink>
          </li>
       </ul>
    </nav>
