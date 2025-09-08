@@ -55,58 +55,27 @@ const computedPages = computed(() =>
 
 // =============================================================================
 
-const navClass = {
-   close: [
-      // mobile
-      'w-dvw',
-      'ml-[-100%]',
-      // desktop
-      'md:w-sidebar-close',
-      'md:ml-0',
-   ],
-   open: [
-      // mobile
-      'w-dvw',
-      'ml-0',
-      // desktop
-      'md:w-sidebar-open',
-      'md:ml-0',
-   ],
-}
-const hamburgerClass = {
-   close: [
-      'text-zinc-500',
-      // mobile
-      'left-full',
-      'ml-6',
-      // desktop
-      'md:left-0',
-      'md:ml-0',
-   ],
-   open: [
-      'text-zinc-300',
-      // mobile
-      'left-0',
-      'ml-0',
-      // desktop
-      'md:left-0',
-      'md:ml-0',
-   ],
-}
+const $sidebar = computed(() => ({
+   sidebar_open: props.isSidebarOpen,
+   sidebar_close: !props.isSidebarOpen,
+   'md:hover:w-sidebar-open': isOpenWhenHover.value,
+}))
+
+const $hamburger = computed(() => ({
+   sidebar__hamburger_open: props.isSidebarOpen,
+   sidebar__hamburger_close: !props.isSidebarOpen,
+}))
 </script>
 
 <template>
    <nav
       class="bg-zinc-950 h-dvh fixed p-3 group transition-all duration-400"
-      :class="[
-         navClass[isSidebarOpen ? 'open' : 'close'],
-         { 'md:hover:w-sidebar-open': isOpenWhenHover },
-      ]"
+      :class="$sidebar"
       @mouseleave="isOpenWhenHover = true"
    >
       <div
          class="sidebar__item aspect-square w-min gap-0 relative duration-400 hover:text-zinc-100"
-         :class="[hamburgerClass[isSidebarOpen ? 'open' : 'close']]"
+         :class="$hamburger"
          @click="toggleSidebar"
       >
          <Icon
