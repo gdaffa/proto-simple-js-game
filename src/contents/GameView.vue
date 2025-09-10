@@ -1,5 +1,6 @@
 <script setup>
 import MainPage from '@/components/MainPage.vue'
+import CardSection from '@/components/CardSection.vue'
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import MainPage from '@/components/MainPage.vue'
          autem quasi accusamus inventore nihil vero! Labore ad laboriosam corporis aut quibusdam
          modi maxime nihil voluptatum nemo consectetur.
       </p>
+      <CardSection />
    </MainPage>
 </template>
