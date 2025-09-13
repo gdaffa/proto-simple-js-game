@@ -21,9 +21,10 @@ const $main = computed(() => ({
 
 <template>
    <SideBar @openSidebar="openSidebar" :isSidebarOpen="isSidebarOpen" />
-   <div class="float-right transition-all duration-400" :class="$main">
-      <main class="w-262 mx-auto max-w-full box-border p-6 mt-15 md:mt-0">
-         <RouterView />
-      </main>
-   </div>
+   <main
+      class="float-right max-w-full mt-15 md:mt-0 p-6 box-border grid grid-cols-[min(--spacing(262),100%)] justify-center transition-all duration-400"
+      :class="$main"
+   >
+      <RouterView />
+   </main>
 </template>
