@@ -11,7 +11,7 @@ const $difficulty = [
 ]
 </script>
 <template>
-   <ul class="grid grid-cols-[repeat(auto-fit,minmax(224px,1fr))] gap-4 mt-8">
+   <ul class="grid grid-cols-[repeat(auto-fill,minmax(224px,1fr))] gap-4 mt-8">
       <li v-for="(game, index) in gameRoutes" :key="index" class="rounded-xl overflow-hidden">
          <img src="/src/assets/images/game.jpg" alt="" class="aspect-video object-cover" />
          <div class="flex flex-col px-3 py-2 bg-zinc-600/10 h-full">
