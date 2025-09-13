@@ -14,8 +14,8 @@ function openSidebar(state) {
 // =============================================================================
 
 const $main = computed(() => ({
-   'w-dvw md:w-[calc(100dvw-var(--spacing-sidebar-open))]': isSidebarOpen.value,
-   'w-dvw md:w-[calc(100dvw-var(--spacing-sidebar-close))]': !isSidebarOpen.value,
+   'w-full md:w-[calc(100%-var(--spacing-sidebar-open))]': isSidebarOpen.value,
+   'w-full md:w-[calc(100%-var(--spacing-sidebar-close))]': !isSidebarOpen.value,
 }))
 </script>
 
