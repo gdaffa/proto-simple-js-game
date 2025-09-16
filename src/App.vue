@@ -22,7 +22,7 @@ const $main = computed(() => ({
 <template>
    <SideBar @openSidebar="openSidebar" :isSidebarOpen="isSidebarOpen" />
    <main
-      class="float-right max-w-full mt-15 md:mt-0 p-6 box-border grid grid-cols-[min(--spacing(262),100%)] justify-center transition-all duration-400"
+      class="float-right max-w-full transition-all duration-400"
       :class="$main"
    >
       <RouterView />

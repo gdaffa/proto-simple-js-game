@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import gameRoutes from '@/router/game-routes.js'
 
 const difficulty = ['Very Easy', 'Easy', 'Medium', 'Hard', 'Very Hard']
@@ -16,7 +17,7 @@ const $difficulty = [
          <img src="/src/assets/images/game.jpg" alt="" class="aspect-video object-cover" />
          <div class="flex flex-col px-3 py-2 bg-zinc-600/10 h-full">
             <h2 class="text-zinc-200 font-mozilla-headline font-semibold text-lg">
-               {{ game.name }}
+               <RouterLink :to="game.path">{{ game.name }}</RouterLink>
             </h2>
             <div class="mt-1 mb-2">
                <span

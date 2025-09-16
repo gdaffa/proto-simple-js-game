@@ -1,10 +1,11 @@
 import { createWebHistory, createRouter } from 'vue-router'
+import gameRoutes from './game-routes.js'
 
 const routes = [
    {
-      name: 'Game',
+      name: 'Home',
       path: '/',
-      component: 'GameView',
+      component: 'HomeView',
    },
    {
       name: 'Contribute',
@@ -17,6 +18,8 @@ const routes = [
       component: 'AboutView',
    },
 ]
+
+routes.push(...gameRoutes)
 
 const router = createRouter({
    history: createWebHistory(import.meta.env.BASE_URL),
