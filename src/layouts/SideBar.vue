@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
-import mainRoutes from '@/router/main-routes.js'
 import { RouterLink, useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
+
+import mainRoutes from '@/router/main-routes.js'
+import gameRoutes from '@/router/game-routes.js'
 
 const props = defineProps(['isSidebarOpen'])
 const emits = defineEmits(['openSidebar'])
@@ -10,6 +12,7 @@ const emits = defineEmits(['openSidebar'])
 // =============================================================================
 
 const route = useRoute()
+const pages = mainRoutes
 const isOpenWhenHover = ref(true)
 
 // =============================================================================
@@ -25,16 +28,21 @@ function toggleSidebar() {
 /**
  * Compute which page is selected based on the path.
  */
-const computedPages = computed(() =>
-   mainRoutes.map((page) => {
-      let selected = page.path == route.path
+const computedPages = computed(() => {
+   let isNowGamePage = gameRoutes.some((game) => game.name == route.name)
+   let activePath = isNowGamePage ? '/' : route.path
+
+   let newPages = pages.map((page) => {
+      let selected = page.path == activePath
       return {
          ...page,
          classes: { 'text-zinc-50 bg-sky-700': selected },
          icon: `solar:${page.icon}-${selected ? 'bold' : 'broken'}`,
       }
-   }),
-)
+   })
+
+   return newPages
+})
 
 // =============================================================================
 
