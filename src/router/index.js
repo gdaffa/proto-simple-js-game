@@ -1,32 +1,19 @@
 import { createWebHistory, createRouter } from 'vue-router'
+import mainRoutes from './main-routes.js'
 import gameRoutes from './game-routes.js'
 
-const routes = [
-   {
-      name: 'Home',
-      path: '/',
-      component: 'HomeView',
-   },
-   {
-      name: 'Contribute',
-      path: '/contribute',
-      component: 'ContributeView',
-   },
-   {
-      name: 'About',
-      path: '/about',
-      component: 'AboutView',
-   },
-]
+let routes = []
+routes.push(...mainRoutes, ...gameRoutes)
 
-routes.push(...gameRoutes)
+// =============================================================================
+
+routes = routes.map((route) => ({
+   ...route, component: () => import(`../contents/${route.component}.vue`),
+}))
 
 const router = createRouter({
    history: createWebHistory(import.meta.env.BASE_URL),
-   routes: routes.map((route) => ({
-      ...route,
-      component: () => import(`../contents/${route.component}.vue`),
-   })),
+   routes,
 })
 
 export default router

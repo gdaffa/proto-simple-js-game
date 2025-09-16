@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { ref, computed } from 'vue'
+import mainRoutes from '@/router/main-routes.js'
 import { RouterLink, useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 
@@ -9,24 +10,6 @@ const emits = defineEmits(['openSidebar'])
 // =============================================================================
 
 const route = useRoute()
-
-const pages = [
-   {
-      name: 'Game',
-      path: '/',
-      icon: 'gamepad-charge',
-   },
-   {
-      name: 'Contribute',
-      path: '/contribute',
-      icon: 'hand-heart',
-   },
-   {
-      name: 'About',
-      path: '/about',
-      icon: 'info-circle',
-   },
-]
 const isOpenWhenHover = ref(true)
 
 // =============================================================================
@@ -43,7 +26,7 @@ function toggleSidebar() {
  * Compute which page is selected based on the path.
  */
 const computedPages = computed(() =>
-   pages.map((page) => {
+   mainRoutes.map((page) => {
       let selected = page.path == route.path
       return {
          ...page,
