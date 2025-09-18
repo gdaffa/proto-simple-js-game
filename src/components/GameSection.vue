@@ -6,17 +6,23 @@ defineEmits(['toggle'])
 </script>
 
 <template>
-   <section class="rounded-lg bg-zinc-800 overflow-hidden transition-all duration-400">
+   <section class="rounded-lg bg-zinc-800 overflow-hidden transition-all duration-600">
 
-      <h1 class="text-xl font-mozilla-headline font-bold flex items-center px-3 py-2 gap-2 overflow-visible justify-start">
-         <Icon
-            icon="solar:alt-arrow-down-bold"
-            class="text-2xl transition-all duration-400"
-            :class="{'-rotate-90': !isOpen}"
+      <div class="grid grid-cols-[min-content_1fr] items-center">
+         <button
+            class="w-11 aspect-square grid place-items-center"
             @click="$emit('toggle')"
-         />
-         <slot name="title"/>
-      </h1>
+         >
+            <Icon
+               icon="solar:alt-arrow-down-bold"
+               class="text-2xl transition-all duration-400"
+               :class="{'-rotate-90': !isOpen}"
+            />
+         </button>
+         <h1 class="text-xl font-mozilla-headline font-bold py-2">
+            <slot name="title"/>
+         </h1>
+      </div>
 
       <slot/>
 
