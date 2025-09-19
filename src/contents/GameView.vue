@@ -11,19 +11,19 @@ const isOpen = reactive({
 })
 
 const $leftSection = {
-   open: 'h-[calc(100%---spacing(14))]',
+   open: 'h-dvh lg:h-[calc(100%---spacing(14))]',
    closed: 'h-11'
 }
 
 const $leftSide = computed(() => ({
-   'w-full': !isOpen.game,
-   'w-[50%]': isOpen.game && (isOpen.key || isOpen.explanation),
-   'w-11': !isOpen.key && !isOpen.explanation
+   'w-full lg:w-full': !isOpen.game,
+   'w-full lg:w-[50%]': isOpen.game && (isOpen.key || isOpen.explanation),
+   'w-full lg:w-11': !isOpen.key && !isOpen.explanation
 }))
 const $rightSide = computed(() => ({
-   'w-full h-full': !isOpen.key && !isOpen.explanation,
-   'w-[50%] h-full': isOpen.game && (isOpen.key || isOpen.explanation),
-   'w-11 h-11': !isOpen.game
+   'w-full h-11 lg:w-11 lg:h-11': !isOpen.game,
+   'w-full h-dvh lg:w-[50%] lg:h-full': isOpen.game && (isOpen.key || isOpen.explanation),
+   'w-full h-dvh lg:w-full  lg:h-full': !isOpen.key && !isOpen.explanation
 }))
 
 // =============================================================================
@@ -65,13 +65,14 @@ function getLeftSectionClass(section) {
 </script>
 
 <template>
-   <div class="p-3 h-[100dvh] flex gap-3">
+   <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-dvh lg:flex mt-15 md:mt-0 gap-3">
       <div
-         class="flex flex-col float-left h-full gap-3 transition-all duration-600"
+         class="flex flex-col gap-3 row-2 transition-all duration-600"
          :class="$leftSide"
       >
 
          <GameSection
+            class="hidden lg:block"
             :class="getLeftSectionClass('key')"
             :isOpen="isOpen.key"
             @toggle="toggleLeftSection('key')"
@@ -90,7 +91,7 @@ function getLeftSectionClass(section) {
          </GameSection>
 
       </div>
-      <div class="transition-all duration-600" :class="$rightSide">
+      <div class="row-1 transition-all duration-600" :class="$rightSide">
 
          <GameSection
             class="h-full"
