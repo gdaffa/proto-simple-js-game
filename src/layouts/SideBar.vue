@@ -7,7 +7,7 @@ import mainRoutes from '@/router/main-routes.js'
 import gameRoutes from '@/router/game-routes.js'
 
 const props = defineProps(['isSidebarOpen'])
-const emits = defineEmits(['openSidebar'])
+const emits = defineEmits(['toggleSidebar'])
 
 // =============================================================================
 
@@ -21,7 +21,7 @@ const isOpenWhenHover = ref(true)
  * Event triggered by clicking the hamburger menu.
  */
 function toggleSidebar() {
-   emits('openSidebar', !props.isSidebarOpen)
+   emits('toggleSidebar')
    isOpenWhenHover.value = false
 }
 
@@ -47,13 +47,13 @@ const computedPages = computed(() => {
 // =============================================================================
 
 const $sidebar = computed(() => ({
-   'w-full ml-0 md:w-sidebar-open md:ml-0': props.isSidebarOpen,
+   'w-full ml-0       md:w-sidebar-open  md:ml-0': props.isSidebarOpen,
    'w-full ml-[-100%] md:w-sidebar-close md:ml-0': !props.isSidebarOpen,
    'md:hover:w-sidebar-open': isOpenWhenHover.value,
 }))
 
 const $hamburger = computed(() => ({
-   'text-zinc-300 left-0 ml-0 md:left-0 md:ml-0': props.isSidebarOpen,
+   'text-zinc-300 left-0    ml-0 md:left-0 md:ml-0': props.isSidebarOpen,
    'text-zinc-500 left-full ml-6 md:left-0 md:ml-0': !props.isSidebarOpen,
 }))
 </script>

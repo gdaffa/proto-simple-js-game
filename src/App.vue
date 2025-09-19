@@ -7,8 +7,8 @@ import SideBar from '@/layouts/SideBar.vue'
 
 const isSidebarOpen = ref(false)
 
-function openSidebar(state) {
-   isSidebarOpen.value = state
+function toggleSidebar() {
+   isSidebarOpen.value = !isSidebarOpen.value
 }
 
 // =============================================================================
@@ -20,11 +20,8 @@ const $main = computed(() => ({
 </script>
 
 <template>
-   <SideBar @openSidebar="openSidebar" :isSidebarOpen="isSidebarOpen" />
-   <main
-      class="float-right max-w-full transition-all duration-400"
-      :class="$main"
-   >
+   <SideBar @toggleSidebar="toggleSidebar" :isSidebarOpen="isSidebarOpen" />
+   <main class="float-right max-w-full transition-all duration-400" :class="$main">
       <RouterView />
    </main>
 </template>
