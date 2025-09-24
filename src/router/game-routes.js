@@ -2,7 +2,7 @@ const wordList = 'Lorem ipsum dolor sit amet consectetur adipisicing elit'.split
 
 const routes = [...Array(6)].map(() => {
    return {
-      name: `Game ${random(0, 999)}`,
+      name: `Example`,
       path: `/game`,
       component: 'GameView',
       difficulty: random(0, 4),

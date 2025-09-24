@@ -1,14 +1,20 @@
 <script setup>
-import { reactive, computed } from 'vue'
+import { ref, reactive, computed, defineAsyncComponent } from 'vue'
+import { useRoute } from 'vue-router'
+import MarkdownIt from 'markdown-it'
 import GameSection from '@/components/GameSection.vue'
 
 // =============================================================================
+
+const routeName = useRoute().name.replace(' ', '')
+const mdit = new MarkdownIt()
 
 const isOpen = reactive({
    game: true,
    key: true,
    explanation: true,
 })
+const explanation = ref('')
 
 // =============================================================================
 
@@ -46,6 +52,14 @@ function toggleRightSection() {
 function getLeftSectionClass(section) {
    return $leftSection[isOpen[section] ? 'open' : 'closed']
 }
+
+// =============================================================================
+
+const GameComp = defineAsyncComponent(() => import(`../games/${routeName}Game.vue`))
+
+fetch(`/explanation/${routeName}Explanation.md`)
+   .then((res) => res.text())
+   .then((raw) => (explanation.value = mdit.render(raw)))
 
 // =============================================================================
 
@@ -87,15 +101,13 @@ const $rightSide = computed(() => ({
             @toggle="toggleLeftSection('explanation')"
          >
             <template #title>Explanation</template>
-            <p class="px-11 py-3">
-               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non magni consectetur ad et
-               eos vitae possimus cumque deleniti sapiente eligendi.
-            </p>
+            <div class="px-11 py-3 [&>*:nth-child(n+2)]:mt-4" v-html="explanation"></div>
          </GameSection>
       </div>
       <div class="row-1 transition-all duration-600" :class="$rightSide">
          <GameSection class="h-full" :isOpen="isOpen.game" @toggle="toggleRightSection">
             <template #title>Game</template>
+            <GameComp />
          </GameSection>
       </div>
    </div>

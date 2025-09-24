@@ -8,7 +8,8 @@ routes.push(...mainRoutes, ...gameRoutes)
 // =============================================================================
 
 routes = routes.map((route) => ({
-   ...route, component: () => import(`../contents/${route.component}.vue`),
+   ...route,
+   component: () => import(`../contents/${route.component}.vue`),
 }))
 
 const router = createRouter({
