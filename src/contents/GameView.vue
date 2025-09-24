@@ -84,6 +84,14 @@ const $rightSide = computed(() => ({
    <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-dvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
          <GameSection
+            :class="getLeftSectionClass('explanation')"
+            :isOpen="isOpen.explanation"
+            @toggle="toggleLeftSection('explanation')"
+         >
+            <template #title>Explanation</template>
+            <div class="px-11 py-3 [&>*:nth-child(n+2)]:mt-4" v-html="explanation"></div>
+         </GameSection>
+         <GameSection
             class="hidden lg:block"
             :class="getLeftSectionClass('key')"
             :isOpen="isOpen.key"
@@ -94,14 +102,6 @@ const $rightSide = computed(() => ({
                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non magni consectetur ad et
                eos vitae possimus cumque deleniti sapiente eligendi.
             </p>
-         </GameSection>
-         <GameSection
-            :class="getLeftSectionClass('explanation')"
-            :isOpen="isOpen.explanation"
-            @toggle="toggleLeftSection('explanation')"
-         >
-            <template #title>Explanation</template>
-            <div class="px-11 py-3 [&>*:nth-child(n+2)]:mt-4" v-html="explanation"></div>
          </GameSection>
       </div>
       <div class="row-1 transition-all duration-600" :class="$rightSide">
