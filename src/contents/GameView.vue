@@ -6,7 +6,7 @@ import GameSection from '@/components/GameSection.vue'
 
 // =============================================================================
 
-const routeName = useRoute().name.replace(' ', '')
+const routeName = useRoute().name.replace(/ /g, '')
 const mdit = new MarkdownIt()
 
 const isOpen = reactive({
