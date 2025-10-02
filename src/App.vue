@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { RouterView } from 'vue-router'
-import SideBar from '@/layouts/SideBar.vue'
+import Sidebar from '@/layouts/SidebarLayouts.vue'
 
 // =============================================================================
 
@@ -20,7 +20,7 @@ const $main = computed(() => ({
 </script>
 
 <template>
-   <SideBar @toggleSidebar="toggleSidebar" :isSidebarOpen="isSidebarOpen" />
+   <Sidebar @toggleSidebar="toggleSidebar" :isSidebarOpen="isSidebarOpen" />
    <main class="float-right max-w-full transition-all duration-400" :class="$main">
       <RouterView />
    </main>
