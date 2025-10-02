@@ -64,7 +64,7 @@ fetch(`/explanation/${routeName}Explanation.md`)
 // =============================================================================
 
 const $leftSection = {
-   open: 'h-dvh lg:h-[calc(100%---spacing(14))]',
+   open: 'h-lvh lg:h-[calc(100%---spacing(14))]',
    closed: 'h-11',
 }
 
@@ -75,13 +75,13 @@ const $leftSide = computed(() => ({
 }))
 const $rightSide = computed(() => ({
    'w-full h-11  lg:w-11    lg:h-11': !isOpen.game,
-   'w-full h-dvh lg:w-[50%] lg:h-full': isOpen.game && (isOpen.key || isOpen.explanation),
-   'w-full h-dvh lg:w-full  lg:h-full': !isOpen.key && !isOpen.explanation,
+   'w-full h-lvh lg:w-[50%] lg:h-full': isOpen.game && (isOpen.key || isOpen.explanation),
+   'w-full h-lvh lg:w-full  lg:h-full': !isOpen.key && !isOpen.explanation,
 }))
 </script>
 
 <template>
-   <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-dvh lg:flex mt-15 md:mt-0 gap-3">
+   <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-lvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
          <GameSection
             :class="getLeftSectionClass('explanation')"
