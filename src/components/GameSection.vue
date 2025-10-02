@@ -1,7 +1,7 @@
 <script setup>
 import { Icon } from '@iconify/vue'
 
-defineProps(['isOpen'])
+defineProps(['titleTag', 'isOpen'])
 defineEmits(['toggle'])
 </script>
 
@@ -15,9 +15,9 @@ defineEmits(['toggle'])
                :class="{ '-rotate-90': !isOpen }"
             />
          </button>
-         <h1 class="text-xl font-mozilla-headline font-bold py-2">
+         <component :is="$props.titleTag" class="text-xl font-mozilla-headline font-bold py-2">
             <slot name="title" />
-         </h1>
+         </component>
       </div>
 
       <slot />

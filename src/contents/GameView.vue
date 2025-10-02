@@ -85,6 +85,7 @@ const $rightSide = computed(() => ({
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
          <GameSection
             :class="getLeftSectionClass('explanation')"
+            titleTag="h2"
             :isOpen="isOpen.explanation"
             @toggle="toggleLeftSection('explanation')"
          >
@@ -94,6 +95,7 @@ const $rightSide = computed(() => ({
          <GameSection
             class="hidden lg:block"
             :class="getLeftSectionClass('key')"
+            titleTag="h2"
             :isOpen="isOpen.key"
             @toggle="toggleLeftSection('key')"
          >
@@ -105,7 +107,12 @@ const $rightSide = computed(() => ({
          </GameSection>
       </div>
       <div class="row-1 transition-all duration-600" :class="$rightSide">
-         <GameSection class="h-full" :isOpen="isOpen.game" @toggle="toggleRightSection">
+         <GameSection
+            class="h-full"
+            titleTag="h1"
+            :isOpen="isOpen.game"
+            @toggle="toggleRightSection"
+         >
             <template #title>Game</template>
             <GameComp />
          </GameSection>
