@@ -152,7 +152,10 @@ const $rightSide = computed(() => ({
                      :key="i"
                      class="flex gap-3 items-center text-base"
                   >
-                     <Icon :icon="item[0]" class="text-xl shadow-md shadow-zinc-900" />
+                     <Icon
+                        :icon="item[0]"
+                        class="text-zinc-300/90 text-xl shadow-md shadow-zinc-900"
+                     />
                      {{ item[1] }}
                   </li>
                </ul>
