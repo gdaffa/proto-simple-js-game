@@ -73,15 +73,19 @@ getAsset('gameplay').then((raw) => {
 
    // gameplay category
    // the pattern is select all gameplay content until new line
-   let gameplayRaw = raw.match(/# Gameplay\n\n(.*?)\n/)[1]
-   gameplayHtml.value = mdit.renderInline(gameplayRaw)
+   let gameplayRaw = raw.match(/# Gameplay\n\n(.*?)\n/)
+   gameplayHtml.value = mdit.renderInline(gameplayRaw[1])
 
    // key category
    // the pattern is select all key content with pattern like '[k] Desc'
-   let keyRaw = raw.match(/# Key\n\n((?:\[\w+\].*\n{0,1})*)/)[1]
+   let keyRaw = raw.match(/# Key\n\n((?:\[\w+\].*\n{0,1})*)/)
+   if (keyRaw == null) {
+      return
+   }
+
    let keyListTemp = []
 
-   for (let line of keyRaw.split('\n')) {
+   for (let line of keyRaw[1].split('\n')) {
       if (line == '') {
          continue
       }
@@ -149,7 +153,7 @@ const $rightSide = computed(() => ({
          >
             <template #title>Gameplay</template>
             <div class="px-3 lg:px-11 py-3">
-               <ul class="flex flex-col gap-1 mb-4">
+               <ul v-if="keyList.length > 0" class="flex flex-col gap-1 mb-4">
                   <li
                      v-for="(item, i) in keyList"
                      :key="i"
