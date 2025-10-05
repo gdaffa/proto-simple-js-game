@@ -136,7 +136,10 @@ const $rightSide = computed(() => ({
             @toggle="toggleLeftSection('explanation')"
          >
             <template #title>Explanation</template>
-            <div class="px-11 py-3 [&>*:nth-child(n+2)]:mt-4" v-html="explanationHtml"></div>
+            <div
+               class="px-3 lg:px-11 py-3 [&>*:nth-child(n+2)]:mt-4"
+               v-html="explanationHtml"
+            ></div>
          </GameSection>
          <GameSection
             :class="getLeftSectionClass('gameplay')"
@@ -145,7 +148,7 @@ const $rightSide = computed(() => ({
             @toggle="toggleLeftSection('gameplay')"
          >
             <template #title>Gameplay</template>
-            <div class="px-11 py-3">
+            <div class="px-3 lg:px-11 py-3">
                <ul class="flex flex-col gap-1 mb-4">
                   <li
                      v-for="(item, i) in keyList"
