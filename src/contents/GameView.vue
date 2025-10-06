@@ -141,7 +141,7 @@ const $rightSide = computed(() => ({
          >
             <template #title>Explanation</template>
             <div
-               class="px-3 lg:px-11 py-3 [&>*:nth-child(n+2)]:mt-4"
+               class="px-3 lg:px-11 py-3 [&>*:nth-child(n+2)]:mt-4 w-full overflow-y-scroll overflow-x-hidden"
                v-html="explanationHtml"
             ></div>
          </GameSection>
@@ -152,7 +152,7 @@ const $rightSide = computed(() => ({
             @toggle="toggleLeftSection('gameplay')"
          >
             <template #title>Gameplay</template>
-            <div class="px-3 lg:px-11 py-3">
+            <div class="px-3 lg:px-11 py-3 overflow-y-scroll overflow-x-hidden">
                <ul v-if="keyList.length > 0" class="flex flex-col gap-1 mb-4">
                   <li
                      v-for="(item, i) in keyList"
@@ -183,3 +183,17 @@ const $rightSide = computed(() => ({
       </div>
    </div>
 </template>
+
+<style scoped>
+@reference "tailwindcss";
+
+::-webkit-scrollbar {
+   @apply w-2.5;
+}
+::-webkit-scrollbar-track {
+   @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+   @apply bg-zinc-700 rounded-full;
+}
+</style>

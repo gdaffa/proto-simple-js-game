@@ -7,7 +7,7 @@ defineEmits(['toggle'])
 
 <template>
    <section
-      class="text-zinc-300 rounded-lg bg-zinc-800 overflow-hidden transition-all duration-600"
+      class="text-zinc-300 rounded-lg bg-zinc-800 flex flex-col overflow-hidden transition-all duration-600"
    >
       <div class="text-zinc-200 grid grid-cols-[min-content_1fr] items-center bg-inherit relative">
          <button class="w-11 aspect-square grid place-items-center" @click="$emit('toggle')">
