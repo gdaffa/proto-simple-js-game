@@ -9,7 +9,9 @@ defineEmits(['toggle'])
    <section
       class="text-zinc-300 rounded-lg bg-zinc-800 flex flex-col overflow-hidden transition-all duration-600"
    >
-      <div class="text-zinc-200 grid grid-cols-[min-content_1fr] items-center bg-inherit relative">
+      <div
+         class="text-zinc-200 grid grid-cols-[min-content_1fr] items-center bg-inherit relative z-1"
+      >
          <button class="w-11 aspect-square grid place-items-center" @click="$emit('toggle')">
             <Icon
                icon="solar:alt-arrow-down-bold"

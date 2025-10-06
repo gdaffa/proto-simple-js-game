@@ -1,17 +1,18 @@
-const wordList = 'Lorem ipsum dolor sit amet consectetur adipisicing elit'.split(' ')
+let routes = [
+   {
+      name: 'Example',
+      difficulty: 3,
+      description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
+      path: '/example',
+   },
+   {
+      name: 'Tic Tac Toe',
+      difficulty: 1,
+      description: 'Permainan dengan lebar 3x3 kotak untuk mendapatkan 3 simbol secara berurutan.',
+      path: '/tictactoe',
+   },
+]
 
-const routes = [...Array(6)].map(() => {
-   return {
-      name: `Example`,
-      path: `/game`,
-      component: 'GameView',
-      difficulty: random(0, 4),
-      description: wordList.slice(0, random(3, wordList.length)).join(' ') + '.',
-   }
-})
-
-function random(start, end) {
-   return start + Math.floor(Math.random() * (end - start + 1))
-}
+routes = routes.map((route) => ({ ...route, component: 'GameView' }))
 
 export default routes

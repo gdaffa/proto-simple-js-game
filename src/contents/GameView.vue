@@ -173,7 +173,7 @@ const $rightSide = computed(() => ({
       </div>
       <div class="row-1 transition-all duration-600" :class="$rightSide">
          <GameSection
-            class="h-full"
+            class="h-full flex flex-col"
             titleTag="h1"
             :isOpen="isOpen.game"
             @toggle="toggleRightSection"

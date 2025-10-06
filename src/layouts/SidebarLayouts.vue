@@ -60,7 +60,7 @@ const $hamburger = computed(() => ({
 
 <template>
    <nav
-      class="bg-zinc-950 h-lvh fixed p-3 group transition-all duration-400 z-1"
+      class="bg-zinc-950 h-lvh fixed p-3 group transition-all duration-400 z-2"
       :class="$sidebar"
       @mouseleave="isOpenWhenHover = true"
    >
