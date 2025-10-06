@@ -8,7 +8,8 @@ import GameSection from '@/components/GameSection.vue'
 
 // =============================================================================
 
-const routeName = useRoute().name.replace(/ /g, '')
+const routeName = useRoute().name
+const routeNameNoSpace = routeName.replace(/ /g, '')
 const mdit = new MarkdownIt()
 
 const isOpen = reactive({
@@ -59,12 +60,12 @@ function getLeftSectionClass(section) {
 }
 
 async function getAsset(asset) {
-   return fetch(`/game-assets/${routeName.toLowerCase()}/${asset}.md`).then((res) => res.text())
+   return fetch(`/game-assets/${routeNameNoSpace}/${asset}.md`).then((res) => res.text())
 }
 
 // =============================================================================
 
-const GameComp = defineAsyncComponent(() => import(`../games/${routeName}Game.vue`))
+const GameComp = defineAsyncComponent(() => import(`../games/${routeNameNoSpace}Game.vue`))
 
 getAsset('explanation').then((raw) => (explanationHtml.value = mdit.render(raw)))
 
@@ -177,7 +178,7 @@ const $rightSide = computed(() => ({
             :isOpen="isOpen.game"
             @toggle="toggleRightSection"
          >
-            <template #title>Game</template>
+            <template #title>{{ routeName }}</template>
             <GameComp />
          </GameSection>
       </div>
