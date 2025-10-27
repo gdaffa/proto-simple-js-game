@@ -115,19 +115,19 @@ getAsset('gameplay').then((raw) => {
 // =============================================================================
 
 const $leftSection = {
-   open: 'h-lvh lg:h-[calc(100%---spacing(14))]',
-   closed: 'h-11',
+   open: 'left_side--section-open',
+   closed: 'left_side--section-closed',
 }
 
 const $leftSide = computed(() => ({
-   'w-full lg:w-full': !isOpen.game,
-   'w-full lg:w-[50%]': isOpen.game && (isOpen.gameplay || isOpen.explanation),
-   'w-full lg:w-11': !isOpen.gameplay && !isOpen.explanation,
+   'left_side-open lg:w-full': !isOpen.game,
+   'left_side-open': isOpen.game && (isOpen.gameplay || isOpen.explanation),
+   'left_side-closed': !isOpen.gameplay && !isOpen.explanation,
 }))
 const $rightSide = computed(() => ({
-   'w-full h-11  lg:w-11    lg:h-11': !isOpen.game,
-   'w-full h-lvh lg:w-[50%] lg:h-full': isOpen.game && (isOpen.gameplay || isOpen.explanation),
-   'w-full h-lvh lg:w-full  lg:h-full': !isOpen.gameplay && !isOpen.explanation,
+   'right_side-closed': !isOpen.game,
+   'right_side-open': isOpen.game && (isOpen.gameplay || isOpen.explanation),
+   'right_side-open lg:w-full': !isOpen.gameplay && !isOpen.explanation,
 }))
 </script>
 
@@ -186,7 +186,7 @@ const $rightSide = computed(() => ({
 </template>
 
 <style scoped>
-@reference "tailwindcss";
+@import '../assets/style.css';
 
 ::-webkit-scrollbar {
    @apply w-2.5;
@@ -196,5 +196,28 @@ const $rightSide = computed(() => ({
 }
 ::-webkit-scrollbar-thumb {
    @apply bg-zinc-700 rounded-full;
+}
+
+@layer components {
+   .right_side-open {
+      @apply w-full h-lvh lg:w-[50%] lg:h-full;
+   }
+   .right_side-closed {
+      @apply w-full h-section-icon-size lg:w-section-icon-size lg:h-section-icon-size;
+   }
+
+   .left_side-open {
+      @apply w-full lg:w-[50%];
+   }
+   .left_side-closed {
+      @apply w-full lg:w-section-icon-size;
+   }
+
+   .left_side--section-open {
+      @apply h-lvh lg:h-[calc(100%-var(--spacing-section-icon-size)---spacing(3))];
+   }
+   .left_side--section-closed {
+      @apply h-section-icon-size lg:h-section-icon-size;
+   }
 }
 </style>

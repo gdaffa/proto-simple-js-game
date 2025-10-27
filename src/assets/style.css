@@ -16,6 +16,9 @@
    --font-mozilla-headline: Mozilla_Headline, var(--font-sans);
    --spacing-sidebar-close: --spacing(18);
    --spacing-sidebar-open: --spacing(55);
+
+   /* GameView.vue */
+   --spacing-section-icon-size: --spacing(11);
 }
 
 @layer components {
