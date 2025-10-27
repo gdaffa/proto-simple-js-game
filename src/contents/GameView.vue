@@ -25,6 +25,30 @@ const explanationHtml = ref('')
 // =============================================================================
 
 /**
+ * Parse key line from markdown into `[icon, description]`.
+ *
+ * @param {string} line
+ */
+function parseKeyLine(line) {
+   // '[k] Description' => ['[k] Desc', 'k', 'Description']
+   let keyItems = line.match(/\[(\w*)\] (.*)/)
+   keyItems.shift()
+
+   let key = keyItems[0].toLowerCase()
+   // alphabetical key
+   if (key.length == 1) {
+      keyItems[0] = `mynaui:letter-${key}-square-solid`
+   }
+   // arrow key
+   if (key.length == 2 && key[0] == 'a') {
+      let direction = { u: 'up', l: 'left', r: 'right', d: 'down' }
+      keyItems[0] = `mynaui:arrow-${direction[key[1]]}-square-solid`
+   }
+
+   return keyItems
+}
+
+/**
  * Change left side section state in `isOpen` variable.
  *
  * @param {'key'|'explanation'} section
@@ -85,32 +109,14 @@ getAsset('gameplay').then((raw) => {
       return
    }
 
-   let keyListTemp = []
-
+   let keyLines = []
    for (let line of keyRaw[1].split('\n')) {
-      if (line == '') {
-         continue
+      if (line != '') {
+         keyLines.push(parseKeyLine(line))
       }
-
-      // '[k] Description' => ['[k] Desc', 'k', 'Description']
-      let keyItems = line.match(/\[(\w*)\] (.*)/)
-      keyItems.shift()
-
-      let key = keyItems[0].toLowerCase()
-      // alphabetical key
-      if (key.length == 1) {
-         keyItems[0] = `mynaui:letter-${key}-square-solid`
-      }
-      // arrow key
-      if (key.length == 2 && key[0] == 'a') {
-         let direction = { u: 'up', l: 'left', r: 'right', d: 'down' }
-         keyItems[0] = `mynaui:arrow-${direction[key[1]]}-square-solid`
-      }
-
-      keyListTemp.push(keyItems)
    }
 
-   keyList.value = keyListTemp
+   keyList.value = keyLines
 })
 
 // =============================================================================
