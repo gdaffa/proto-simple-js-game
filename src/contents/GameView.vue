@@ -27,7 +27,7 @@ const explanationHtml = ref('')
 /**
  * Change left side section state in `isOpen` variable.
  *
- * @param section - Section name, either `key` or `explanation`.
+ * @param {'key'|'explanation'} section
  */
 function toggleLeftSection(section) {
    isOpen[section] = !isOpen[section]
@@ -37,10 +37,6 @@ function toggleLeftSection(section) {
    }
 }
 
-/**
- * Change right side section state in `isOpen` variable.
- * The section will always be the `game` section.
- */
 function toggleRightSection() {
    isOpen.game = !isOpen.game
 
@@ -53,12 +49,17 @@ function toggleRightSection() {
 /**
  * Get a class that is already determined for left section side.
  *
- * @param section - Section name, either `key` or `explanation`.
+ * @param {'key'|'explanation'} section
  */
 function getLeftSectionClass(section) {
    return $leftSection[isOpen[section] ? 'open' : 'closed']
 }
 
+/**
+ * Get markdown content file.
+ *
+ * @param {string} asset
+ */
 async function getAsset(asset) {
    return fetch(`/game-assets/${routeNameNoSpace}/${asset}.md`).then((res) => res.text())
 }
