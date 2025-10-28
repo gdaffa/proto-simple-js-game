@@ -71,15 +71,6 @@ function toggleRightSection() {
 }
 
 /**
- * Get a class that is already determined for left section side.
- *
- * @param {'key'|'explanation'} section
- */
-function getLeftSectionClass(section) {
-   return $leftSection[isOpen[section] ? 'open' : 'closed']
-}
-
-/**
  * Get markdown content file.
  *
  * @param {string} asset
@@ -121,10 +112,14 @@ getAsset('gameplay').then((raw) => {
 
 // =============================================================================
 
-const $leftSection = {
-   open: 'left_side--section-open',
-   closed: 'left_side--section-closed',
-}
+const $explanation = computed(() => ({
+   'left_side--section-open': isOpen.explanation,
+   'left_side--section-closed': !isOpen.explanation,
+}))
+const $gameplay = computed(() => ({
+   'left_side--section-open': isOpen.gameplay,
+   'left_side--section-closed': !isOpen.gameplay,
+}))
 
 const $leftSide = computed(() => ({
    'left_side-open lg:w-full': !isOpen.game,
@@ -142,7 +137,7 @@ const $rightSide = computed(() => ({
    <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-lvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
          <GameSection
-            :class="getLeftSectionClass('explanation')"
+            :class="$explanation"
             titleTag="h2"
             :isOpen="isOpen.explanation"
             @toggle="toggleLeftSection('explanation')"
@@ -154,7 +149,7 @@ const $rightSide = computed(() => ({
             ></div>
          </GameSection>
          <GameSection
-            :class="getLeftSectionClass('gameplay')"
+            :class="$gameplay"
             titleTag="h2"
             :isOpen="isOpen.gameplay"
             @toggle="toggleLeftSection('gameplay')"
