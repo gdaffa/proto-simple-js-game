@@ -61,6 +61,9 @@ function toggleLeftSection(section) {
    }
 }
 
+/**
+ * Change right side state in `isOpen`, primarly for `isOpen.game` state.
+ */
 function toggleRightSection() {
    isOpen.game = !isOpen.game
 
