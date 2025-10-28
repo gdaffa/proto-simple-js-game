@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import MarkdownIt from 'markdown-it'
 
-import GameSection from '@/components/GameSection.vue'
+import GameSectionComp from '@/components/GameSectionComp.vue'
 
 // =============================================================================
 
@@ -139,7 +139,7 @@ const $rightSide = computed(() => ({
 <template>
    <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-lvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
-         <GameSection
+         <GameSectionComp
             :class="$explanation"
             titleTag="h2"
             :isOpen="isOpen.explanation"
@@ -150,8 +150,8 @@ const $rightSide = computed(() => ({
                class="px-3 lg:px-11 py-3 [&>*:nth-child(n+2)]:mt-4 w-full overflow-y-scroll overflow-x-hidden"
                v-html="explanationHtml"
             ></div>
-         </GameSection>
-         <GameSection
+         </GameSectionComp>
+         <GameSectionComp
             :class="$gameplay"
             titleTag="h2"
             :isOpen="isOpen.gameplay"
@@ -174,10 +174,10 @@ const $rightSide = computed(() => ({
                </ul>
                <p v-html="gameplayHtml"></p>
             </div>
-         </GameSection>
+         </GameSectionComp>
       </div>
       <div class="row-1 transition-all duration-600" :class="$rightSide">
-         <GameSection
+         <GameSectionComp
             class="h-full"
             titleTag="h1"
             :isOpen="isOpen.game"
@@ -185,7 +185,7 @@ const $rightSide = computed(() => ({
          >
             <template #title>{{ routeName }}</template>
             <GameComp />
-         </GameSection>
+         </GameSectionComp>
       </div>
    </div>
 </template>
