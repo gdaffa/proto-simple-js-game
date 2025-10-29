@@ -8,19 +8,30 @@ import GameSectionComp from '@/components/GameSectionComp.vue'
 
 // =============================================================================
 
+/**
+ * A class to manage each section state easily.
+ */
+class GameSection {
+   constructor() {
+      return reactive(this)
+   }
+
+   class = ''
+   content = ''
+   isOpen = true
+}
+
+// =============================================================================
+
 const routeName = useRoute().name
 const routeNameNoSpace = routeName.replace(/ /g, '')
 const mdit = new MarkdownIt()
 
-const isOpen = reactive({
-   game: true,
-   explanation: true,
-   gameplay: true,
-})
+const $Game = new GameSection()
+const $Explanation = new GameSection()
+const $Gameplay = new GameSection()
 
 const keyList = ref([])
-const gameplayHtml = ref('')
-const explanationHtml = ref('')
 
 // =============================================================================
 
@@ -49,27 +60,27 @@ function parseKeyLine(line) {
 }
 
 /**
- * Change left side section state in `isOpen` variable.
+ * Change left side section open state, which is `$Gameplay` and `$Explanation`.
  *
- * @param {'key'|'explanation'} section
+ * @param {GameSection} $Section
  */
-function toggleLeftSection(section) {
-   isOpen[section] = !isOpen[section]
+function toggleLeftSection($Section) {
+   $Section.isOpen = !$Section.isOpen
 
-   if (!isOpen.gameplay && !isOpen.explanation) {
-      isOpen.game = true
+   if (!$Gameplay.isOpen && !$Explanation.isOpen) {
+      $Game.isOpen = true
    }
 }
 
 /**
- * Change right side state in `isOpen`, primarly for `isOpen.game` state.
+ * Change right side open state, which is `$Game`.
  */
 function toggleRightSection() {
-   isOpen.game = !isOpen.game
+   $Game.isOpen = !$Game.isOpen
 
-   if (!isOpen.gameplay && !isOpen.explanation && !isOpen.game) {
-      isOpen.gameplay = true
-      isOpen.explanation = true
+   if (!$Gameplay.isOpen && !$Explanation.isOpen && !$Game.isOpen) {
+      $Gameplay.isOpen = true
+      $Explanation.isOpen = true
    }
 }
 
@@ -86,7 +97,7 @@ async function getAsset(asset) {
 
 const GameComp = defineAsyncComponent(() => import(`../games/${routeNameNoSpace}Game.vue`))
 
-getAsset('explanation').then((raw) => (explanationHtml.value = mdit.render(raw)))
+getAsset('explanation').then((raw) => ($Explanation.content = mdit.render(raw)))
 
 getAsset('gameplay').then((raw) => {
    raw = raw.replace(/\r/g, '')
@@ -94,7 +105,7 @@ getAsset('gameplay').then((raw) => {
    // gameplay category
    // the pattern is select all gameplay content until new line
    let gameplayRaw = raw.match(/# Gameplay\n\n(.*?)\n/)
-   gameplayHtml.value = mdit.renderInline(gameplayRaw[1])
+   $Gameplay.content = mdit.renderInline(gameplayRaw[1])
 
    // key category
    // the pattern is select all key content with pattern like '[k] Desc'
@@ -115,24 +126,24 @@ getAsset('gameplay').then((raw) => {
 
 // =============================================================================
 
-const $explanation = computed(() => ({
-   'left_side--section-open': isOpen.explanation,
-   'left_side--section-closed': !isOpen.explanation,
+$Explanation.class = computed(() => ({
+   'left_side--section-open': $Explanation.isOpen,
+   'left_side--section-closed': !$Explanation.isOpen,
 }))
-const $gameplay = computed(() => ({
-   'left_side--section-open': isOpen.gameplay,
-   'left_side--section-closed': !isOpen.gameplay,
+$Gameplay.class = computed(() => ({
+   'left_side--section-open': $Gameplay.isOpen,
+   'left_side--section-closed': !$Gameplay.isOpen,
 }))
 
 const $leftSide = computed(() => ({
-   'left_side-open lg:w-full': !isOpen.game,
-   'left_side-open': isOpen.game && (isOpen.gameplay || isOpen.explanation),
-   'left_side-closed': !isOpen.gameplay && !isOpen.explanation,
+   'left_side-open lg:w-full': !$Game.isOpen,
+   'left_side-open': $Game.isOpen && ($Gameplay.isOpen || $Explanation.isOpen),
+   'left_side-closed': !$Gameplay.isOpen && !$Explanation.isOpen,
 }))
 const $rightSide = computed(() => ({
-   'right_side-closed': !isOpen.game,
-   'right_side-open': isOpen.game && (isOpen.gameplay || isOpen.explanation),
-   'right_side-open lg:w-full': !isOpen.gameplay && !isOpen.explanation,
+   'right_side-closed': !$Game.isOpen,
+   'right_side-open': $Game.isOpen && ($Gameplay.isOpen || $Explanation.isOpen),
+   'right_side-open lg:w-full': !$Gameplay.isOpen && !$Explanation.isOpen,
 }))
 </script>
 
@@ -140,22 +151,22 @@ const $rightSide = computed(() => ({
    <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-lvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
          <GameSectionComp
-            :class="$explanation"
+            :class="$Explanation.class"
             titleTag="h2"
-            :isOpen="isOpen.explanation"
-            @toggle="toggleLeftSection('explanation')"
+            :isOpen="$Explanation.isOpen"
+            @toggle="toggleLeftSection($Explanation)"
          >
             <template #title>Explanation</template>
             <div
                class="px-3 lg:px-11 py-3 [&>*:nth-child(n+2)]:mt-4 w-full overflow-y-scroll overflow-x-hidden"
-               v-html="explanationHtml"
+               v-html="$Explanation.content"
             ></div>
          </GameSectionComp>
          <GameSectionComp
-            :class="$gameplay"
+            :class="$Gameplay.class"
             titleTag="h2"
-            :isOpen="isOpen.gameplay"
-            @toggle="toggleLeftSection('gameplay')"
+            :isOpen="$Gameplay.isOpen"
+            @toggle="toggleLeftSection($Gameplay)"
          >
             <template #title>Gameplay</template>
             <div class="px-3 lg:px-11 py-3 overflow-y-scroll overflow-x-hidden">
@@ -172,7 +183,7 @@ const $rightSide = computed(() => ({
                      {{ item[1] }}
                   </li>
                </ul>
-               <p v-html="gameplayHtml"></p>
+               <p v-html="$Gameplay.content"></p>
             </div>
          </GameSectionComp>
       </div>
@@ -180,7 +191,7 @@ const $rightSide = computed(() => ({
          <GameSectionComp
             class="h-full"
             titleTag="h1"
-            :isOpen="isOpen.game"
+            :isOpen="$Game.isOpen"
             @toggle="toggleRightSection"
          >
             <template #title>{{ routeName }}</template>
