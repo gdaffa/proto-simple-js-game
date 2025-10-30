@@ -11,6 +11,12 @@ let routes = [
       description: 'Permainan dengan lebar 3x3 kotak untuk mendapatkan 3 simbol secara berurutan.',
       path: '/tictactoe',
    },
+   {
+      name: 'Snake',
+      difficulty: 0,
+      description: 'Menjadi ular dan berusahalah tumbuh sepanjang mungkin tanpa menabrak.',
+      path: '/snake',
+   },
 ]
 
 routes = routes.map((route) => ({ ...route, component: 'GameView' }))

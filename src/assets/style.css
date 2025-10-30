@@ -32,3 +32,10 @@
          duration-200 text-zinc-500 hover:text-zinc-100;
    }
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   appearance: none;
+   margin: 0;
+}

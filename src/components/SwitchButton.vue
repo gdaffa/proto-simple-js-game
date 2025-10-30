@@ -38,7 +38,7 @@ const $button = computed(() => ({
 </script>
 
 <template>
-   <div class="flex gap-3 items-center">
+   <div class="flex gap-3 items-center transition-all">
       <div><slot /></div>
       <button
          class="bg-zinc-700/50 text-sm font-semibold flex relative items-center rounded-full p-1 select-none z-0"

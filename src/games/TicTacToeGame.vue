@@ -1,8 +1,9 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { Icon } from '@iconify/vue'
 
 import SwitchButton from '@/components/SwitchButton.vue'
+import GameStartButtonComp from '@/components/GameStartButtonComp.vue'
 
 defineProps(['type'])
 
@@ -183,20 +184,6 @@ function startTheGame() {
       botTurn()
    }
 }
-
-// =============================================================================
-
-function getOptionsClasses(status) {
-   return ['transition-all flex flex-wrap justify-center', { 'opacity-45': status }]
-}
-
-const $startButton = computed(() => [
-   ...getOptionsClasses(started.value),
-   {
-      'cursor-not-allowed': started.value,
-      'cursor-pointer hover:scale-105': !started.value,
-   },
-])
 </script>
 
 <template>
@@ -220,7 +207,7 @@ const $startButton = computed(() => [
          </li>
       </ol>
       <SwitchButton
-         :class="getOptionsClasses(started)"
+         :class="{ 'opacity-45': started }"
          @toggle="playWithBool = !playWithBool"
          :status="playWithBool"
          :disabled="started"
@@ -230,7 +217,7 @@ const $startButton = computed(() => [
          <template #false>Teman</template>
       </SwitchButton>
       <SwitchButton
-         :class="getOptionsClasses(started || !playWithBool)"
+         :class="{ 'opacity-45': started || !playWithBool }"
          @toggle="playAsBool = !playAsBool"
          :status="playAsBool"
          :disabled="started || !playWithBool"
@@ -240,12 +227,10 @@ const $startButton = computed(() => [
          <template #true>X</template>
          <template #false>O</template>
       </SwitchButton>
-      <button
-         class="text-lg font-semibold bg-teal-700 mt-6 px-10 py-1 rounded-full select-none"
-         :class="$startButton"
+      <GameStartButtonComp
+         :class="{ 'opacity-45': started }"
          @click="startTheGame"
-      >
-         Mulai!
-      </button>
+         :disabled="started"
+      />
    </div>
 </template>
