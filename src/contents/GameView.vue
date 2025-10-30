@@ -1,10 +1,30 @@
 <script setup>
-import { ref, reactive, computed, defineAsyncComponent } from 'vue'
+import { ref, reactive, computed, defineAsyncComponent, useTemplateRef, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import MarkdownIt from 'markdown-it'
 
-import GameSection from '@/components/GameSection.vue'
+import GameSectionComp from '@/components/GameSectionComp.vue'
+
+// =============================================================================
+
+/**
+ * A class to manage each section state easily.
+ */
+class GameSection {
+   /**
+    * @param {string} elem
+    */
+   constructor(elem) {
+      this.elem = useTemplateRef(elem)
+      return reactive(this)
+   }
+
+   style = ''
+   class = ''
+   content = ''
+   isOpen = true
+}
 
 // =============================================================================
 
@@ -12,53 +32,78 @@ const routeName = useRoute().name
 const routeNameNoSpace = routeName.replace(/ /g, '')
 const mdit = new MarkdownIt()
 
-const isOpen = reactive({
-   game: true,
-   explanation: true,
-   gameplay: true,
-})
+const $Game = new GameSection('$GameElem')
+const $Explanation = new GameSection('$ExplanationElem')
+const $Gameplay = new GameSection('$GameplayElem')
 
 const keyList = ref([])
-const gameplayHtml = ref('')
-const explanationHtml = ref('')
 
 // =============================================================================
 
 /**
- * Change left side section state in `isOpen` variable.
+ * Parse key line from markdown into `[icon, description]`.
  *
- * @param section - Section name, either `key` or `explanation`.
+ * @param {string} line
  */
-function toggleLeftSection(section) {
-   isOpen[section] = !isOpen[section]
+function parseKeyLine(line) {
+   // '[k] Description' => ['[k] Desc', 'k', 'Description']
+   let keyItems = line.match(/\[(\w*)\] (.*)/)
+   keyItems.shift()
 
-   if (!isOpen.gameplay && !isOpen.explanation) {
-      isOpen.game = true
+   let key = keyItems[0].toLowerCase()
+   // alphabetical key
+   if (key.length == 1) {
+      keyItems[0] = `mynaui:letter-${key}-square-solid`
+   }
+   // arrow key
+   if (key.length == 2 && key[0] == 'a') {
+      let direction = { u: 'up', l: 'left', r: 'right', d: 'down' }
+      keyItems[0] = `mynaui:arrow-${direction[key[1]]}-square-solid`
+   }
+
+   return keyItems
+}
+
+/**
+ * Change left side section open state, which is `$Gameplay` and `$Explanation`.
+ *
+ * @param {GameSection} $Section
+ */
+function toggleLeftSection($Section) {
+   $Section.isOpen = !$Section.isOpen
+
+   if (!$Gameplay.isOpen && !$Explanation.isOpen) {
+      $Game.isOpen = true
    }
 }
 
 /**
- * Change right side section state in `isOpen` variable.
- * The section will always be the `game` section.
+ * Change right side open state, which is `$Game`.
  */
 function toggleRightSection() {
-   isOpen.game = !isOpen.game
+   $Game.isOpen = !$Game.isOpen
 
-   if (!isOpen.gameplay && !isOpen.explanation && !isOpen.game) {
-      isOpen.gameplay = true
-      isOpen.explanation = true
+   if (!$Gameplay.isOpen && !$Explanation.isOpen && !$Game.isOpen) {
+      $Gameplay.isOpen = true
+      $Explanation.isOpen = true
    }
 }
 
 /**
- * Get a class that is already determined for left section side.
+ * Update the template first, then update mobile height `$Section` style.
  *
- * @param section - Section name, either `key` or `explanation`.
+ * @param {GameSection} $Section
  */
-function getLeftSectionClass(section) {
-   return $leftSection[isOpen[section] ? 'open' : 'closed']
+async function updateStyle($Section) {
+   await nextTick()
+   $Section.style = { '--mobile-height-open': `${$Section.elem.$el.scrollHeight}px` }
 }
 
+/**
+ * Get markdown content file.
+ *
+ * @param {string} asset
+ */
 async function getAsset(asset) {
    return fetch(`/game-assets/${routeNameNoSpace}/${asset}.md`).then((res) => res.text())
 }
@@ -67,7 +112,10 @@ async function getAsset(asset) {
 
 const GameComp = defineAsyncComponent(() => import(`../games/${routeNameNoSpace}Game.vue`))
 
-getAsset('explanation').then((raw) => (explanationHtml.value = mdit.render(raw)))
+getAsset('explanation').then((raw) => {
+   $Explanation.content = mdit.render(raw)
+   updateStyle($Explanation)
+})
 
 getAsset('gameplay').then((raw) => {
    raw = raw.replace(/\r/g, '')
@@ -75,7 +123,7 @@ getAsset('gameplay').then((raw) => {
    // gameplay category
    // the pattern is select all gameplay content until new line
    let gameplayRaw = raw.match(/# Gameplay\n\n(.*?)\n/)
-   gameplayHtml.value = mdit.renderInline(gameplayRaw[1])
+   $Gameplay.content = mdit.renderInline(gameplayRaw[1])
 
    // key category
    // the pattern is select all key content with pattern like '[k] Desc'
@@ -84,73 +132,64 @@ getAsset('gameplay').then((raw) => {
       return
    }
 
-   let keyListTemp = []
-
+   let keyLines = []
    for (let line of keyRaw[1].split('\n')) {
-      if (line == '') {
-         continue
+      if (line != '') {
+         keyLines.push(parseKeyLine(line))
       }
-
-      // '[k] Description' => ['[k] Desc', 'k', 'Description']
-      let keyItems = line.match(/\[(\w*)\] (.*)/)
-      keyItems.shift()
-
-      let key = keyItems[0].toLowerCase()
-      // alphabetical key
-      if (key.length == 1) {
-         keyItems[0] = `mynaui:letter-${key}-square-solid`
-      }
-      // arrow key
-      if (key.length == 2 && key[0] == 'a') {
-         let direction = { u: 'up', l: 'left', r: 'right', d: 'down' }
-         keyItems[0] = `mynaui:arrow-${direction[key[1]]}-square-solid`
-      }
-
-      keyListTemp.push(keyItems)
    }
 
-   keyList.value = keyListTemp
+   keyList.value = keyLines
+   updateStyle($Gameplay)
 })
 
 // =============================================================================
 
-const $leftSection = {
-   open: 'h-lvh lg:h-[calc(100%---spacing(14))]',
-   closed: 'h-11',
-}
+$Explanation.class = computed(() => ({
+   'left_side--section-open': $Explanation.isOpen,
+   'left_side--section-closed': !$Explanation.isOpen,
+}))
+$Gameplay.class = computed(() => ({
+   'left_side--section-open': $Gameplay.isOpen,
+   'left_side--section-closed': !$Gameplay.isOpen,
+}))
 
 const $leftSide = computed(() => ({
-   'w-full lg:w-full': !isOpen.game,
-   'w-full lg:w-[50%]': isOpen.game && (isOpen.gameplay || isOpen.explanation),
-   'w-full lg:w-11': !isOpen.gameplay && !isOpen.explanation,
+   'left_side-open lg:w-full': !$Game.isOpen,
+   'left_side-open': $Game.isOpen && ($Gameplay.isOpen || $Explanation.isOpen),
+   'left_side-closed': !$Gameplay.isOpen && !$Explanation.isOpen,
 }))
 const $rightSide = computed(() => ({
-   'w-full h-11  lg:w-11    lg:h-11': !isOpen.game,
-   'w-full h-lvh lg:w-[50%] lg:h-full': isOpen.game && (isOpen.gameplay || isOpen.explanation),
-   'w-full h-lvh lg:w-full  lg:h-full': !isOpen.gameplay && !isOpen.explanation,
+   'right_side-closed': !$Game.isOpen,
+   'right_side-open': $Game.isOpen && ($Gameplay.isOpen || $Explanation.isOpen),
+   'right_side-open lg:w-full': !$Gameplay.isOpen && !$Explanation.isOpen,
 }))
 </script>
 
 <template>
    <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-lvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
-         <GameSection
-            :class="getLeftSectionClass('explanation')"
+         <GameSectionComp
+            ref="$ExplanationElem"
+            :style="$Explanation.style"
+            :class="$Explanation.class"
             titleTag="h2"
-            :isOpen="isOpen.explanation"
-            @toggle="toggleLeftSection('explanation')"
+            :isOpen="$Explanation.isOpen"
+            @toggle="toggleLeftSection($Explanation)"
          >
             <template #title>Explanation</template>
             <div
                class="px-3 lg:px-11 py-3 [&>*:nth-child(n+2)]:mt-4 w-full overflow-y-scroll overflow-x-hidden"
-               v-html="explanationHtml"
+               v-html="$Explanation.content"
             ></div>
-         </GameSection>
-         <GameSection
-            :class="getLeftSectionClass('gameplay')"
+         </GameSectionComp>
+         <GameSectionComp
+            ref="$GameplayElem"
+            :style="$Gameplay.style"
+            :class="$Gameplay.class"
             titleTag="h2"
-            :isOpen="isOpen.gameplay"
-            @toggle="toggleLeftSection('gameplay')"
+            :isOpen="$Gameplay.isOpen"
+            @toggle="toggleLeftSection($Gameplay)"
          >
             <template #title>Gameplay</template>
             <div class="px-3 lg:px-11 py-3 overflow-y-scroll overflow-x-hidden">
@@ -167,26 +206,27 @@ const $rightSide = computed(() => ({
                      {{ item[1] }}
                   </li>
                </ul>
-               <p v-html="gameplayHtml"></p>
+               <p v-html="$Gameplay.content"></p>
             </div>
-         </GameSection>
+         </GameSectionComp>
       </div>
-      <div class="row-1 transition-all duration-600" :class="$rightSide">
-         <GameSection
+      <div :style="$Game.style" class="row-1 transition-all duration-600" :class="$rightSide">
+         <GameSectionComp
+            ref="$GameElem"
             class="h-full flex flex-col"
             titleTag="h1"
-            :isOpen="isOpen.game"
+            :isOpen="$Game.isOpen"
             @toggle="toggleRightSection"
          >
             <template #title>{{ routeName }}</template>
-            <GameComp />
-         </GameSection>
+            <GameComp @vue:mounted="updateStyle($Game)" />
+         </GameSectionComp>
       </div>
    </div>
 </template>
 
 <style scoped>
-@reference "tailwindcss";
+@import '../assets/style.css';
 
 ::-webkit-scrollbar {
    @apply w-2.5;
@@ -196,5 +236,30 @@ const $rightSide = computed(() => ({
 }
 ::-webkit-scrollbar-thumb {
    @apply bg-zinc-700 rounded-full;
+}
+
+@layer components {
+   .right_side-open {
+      @apply w-full h-(--mobile-height-open) lg:w-[50%] lg:h-full;
+   }
+   .right_side-closed {
+      @apply w-full h-section-icon-size lg:w-section-icon-size lg:h-section-icon-size;
+   }
+
+   .left_side-open {
+      @apply w-full lg:w-[50%];
+   }
+   .left_side-closed {
+      @apply w-full lg:w-section-icon-size;
+   }
+
+   .left_side--section-open {
+      @apply h-(--mobile-height-open) max-h-[90lvh]
+         lg:h-[calc(100%-var(--spacing-section-icon-size)---spacing(3))]
+         lg:max-h-none;
+   }
+   .left_side--section-closed {
+      @apply h-section-icon-size lg:h-section-icon-size;
+   }
 }
 </style>
