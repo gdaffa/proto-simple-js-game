@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, defineAsyncComponent } from 'vue'
+import { ref, reactive, computed, defineAsyncComponent, useTemplateRef, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import MarkdownIt from 'markdown-it'
@@ -12,10 +12,15 @@ import GameSectionComp from '@/components/GameSectionComp.vue'
  * A class to manage each section state easily.
  */
 class GameSection {
-   constructor() {
+   /**
+    * @param {string} elem
+    */
+   constructor(elem) {
+      this.elem = useTemplateRef(elem)
       return reactive(this)
    }
 
+   style = ''
    class = ''
    content = ''
    isOpen = true
@@ -27,9 +32,9 @@ const routeName = useRoute().name
 const routeNameNoSpace = routeName.replace(/ /g, '')
 const mdit = new MarkdownIt()
 
-const $Game = new GameSection()
-const $Explanation = new GameSection()
-const $Gameplay = new GameSection()
+const $Game = new GameSection('$GameElem')
+const $Explanation = new GameSection('$ExplanationElem')
+const $Gameplay = new GameSection('$GameplayElem')
 
 const keyList = ref([])
 
@@ -85,6 +90,16 @@ function toggleRightSection() {
 }
 
 /**
+ * Update the template first, then update mobile height `$Section` style.
+ *
+ * @param {GameSection} $Section
+ */
+async function updateStyle($Section) {
+   await nextTick()
+   $Section.style = { '--mobile-height-open': `${$Section.elem.$el.scrollHeight}px` }
+}
+
+/**
  * Get markdown content file.
  *
  * @param {string} asset
@@ -97,7 +112,10 @@ async function getAsset(asset) {
 
 const GameComp = defineAsyncComponent(() => import(`../games/${routeNameNoSpace}Game.vue`))
 
-getAsset('explanation').then((raw) => ($Explanation.content = mdit.render(raw)))
+getAsset('explanation').then((raw) => {
+   $Explanation.content = mdit.render(raw)
+   updateStyle($Explanation)
+})
 
 getAsset('gameplay').then((raw) => {
    raw = raw.replace(/\r/g, '')
@@ -122,6 +140,7 @@ getAsset('gameplay').then((raw) => {
    }
 
    keyList.value = keyLines
+   updateStyle($Gameplay)
 })
 
 // =============================================================================
@@ -151,6 +170,8 @@ const $rightSide = computed(() => ({
    <div class="p-3 grid grid-rows-[min-content_min-content] lg:h-lvh lg:flex mt-15 md:mt-0 gap-3">
       <div class="flex flex-col gap-3 row-2 transition-all duration-600" :class="$leftSide">
          <GameSectionComp
+            ref="$ExplanationElem"
+            :style="$Explanation.style"
             :class="$Explanation.class"
             titleTag="h2"
             :isOpen="$Explanation.isOpen"
@@ -163,6 +184,8 @@ const $rightSide = computed(() => ({
             ></div>
          </GameSectionComp>
          <GameSectionComp
+            ref="$GameplayElem"
+            :style="$Gameplay.style"
             :class="$Gameplay.class"
             titleTag="h2"
             :isOpen="$Gameplay.isOpen"
@@ -187,15 +210,16 @@ const $rightSide = computed(() => ({
             </div>
          </GameSectionComp>
       </div>
-      <div class="row-1 transition-all duration-600" :class="$rightSide">
+      <div :style="$Game.style" class="row-1 transition-all duration-600" :class="$rightSide">
          <GameSectionComp
+            ref="$GameElem"
             class="h-full"
             titleTag="h1"
             :isOpen="$Game.isOpen"
             @toggle="toggleRightSection"
          >
             <template #title>{{ routeName }}</template>
-            <GameComp />
+            <GameComp @vue:mounted="updateStyle($Game)" />
          </GameSectionComp>
       </div>
    </div>
@@ -216,7 +240,7 @@ const $rightSide = computed(() => ({
 
 @layer components {
    .right_side-open {
-      @apply w-full h-lvh lg:w-[50%] lg:h-full;
+      @apply w-full h-(--mobile-height-open) lg:w-[50%] lg:h-full;
    }
    .right_side-closed {
       @apply w-full h-section-icon-size lg:w-section-icon-size lg:h-section-icon-size;
@@ -230,7 +254,9 @@ const $rightSide = computed(() => ({
    }
 
    .left_side--section-open {
-      @apply h-lvh lg:h-[calc(100%-var(--spacing-section-icon-size)---spacing(3))];
+      @apply h-(--mobile-height-open) max-h-[90lvh]
+         lg:h-[calc(100%-var(--spacing-section-icon-size)---spacing(3))]
+         lg:max-h-none;
    }
    .left_side--section-closed {
       @apply h-section-icon-size lg:h-section-icon-size;
