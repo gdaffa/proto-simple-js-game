@@ -26,7 +26,7 @@
       @apply font-mozilla-headline text-4xl font-bold text-zinc-100;
    }
 
-   .sidebar__item {
+   .sidebar--item {
       @apply bg-zinc-900 p-3 mb-3 rounded-md grid items-center gap-4 font-medium
          relative grid-cols-[min-content_1fr] overflow-hidden transition-all
          duration-200 text-zinc-500 hover:text-zinc-100;

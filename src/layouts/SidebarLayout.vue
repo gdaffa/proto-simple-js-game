@@ -65,7 +65,7 @@ const $hamburger = computed(() => ({
       @mouseleave="isOpenWhenHover = true"
    >
       <div
-         class="sidebar__item aspect-square w-min gap-0 relative duration-400 hover:text-zinc-100"
+         class="sidebar--item aspect-square w-min gap-0 relative duration-400 hover:text-zinc-100"
          :class="$hamburger"
          @click="toggleSidebar"
       >
@@ -77,7 +77,7 @@ const $hamburger = computed(() => ({
       <hr class="mb-3 border-zinc-900 border-1" />
       <ul>
          <li v-for="(page, i) of computedPages" :key="i">
-            <RouterLink :to="page.path" class="sidebar__item" :class="page.classes">
+            <RouterLink :to="page.path" class="sidebar--item" :class="page.classes">
                <Icon :icon="page.icon" class="text-2xl" />
                <span>{{ page.name }}</span>
             </RouterLink>
