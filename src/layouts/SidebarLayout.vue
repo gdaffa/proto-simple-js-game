@@ -18,11 +18,22 @@ const isOpenWhenHover = ref(true)
 // =============================================================================
 
 /**
- * Event triggered by clicking the hamburger menu.
+ * Toggle sidebar open state, can be change explicitly by `to` parameter.
+ *
+ * @param {boolean?} to
  */
-function toggleSidebar() {
-   emits('toggleSidebar')
+function toggleSidebar(to = null) {
+   emits('toggleSidebar', to)
    isOpenWhenHover.value = false
+}
+
+/**
+ * On mobile, when the sidebar item got clicked, close the sidebar.
+ */
+function closeSidebar() {
+   if (window.innerWidth < 768) {
+      toggleSidebar(false)
+   }
 }
 
 /**
@@ -77,7 +88,12 @@ const $hamburger = computed(() => ({
       <hr class="mb-3 border-zinc-900 border-1" />
       <ul>
          <li v-for="(page, i) of computedPages" :key="i">
-            <RouterLink :to="page.path" class="sidebar--item" :class="page.classes">
+            <RouterLink
+               :to="page.path"
+               class="sidebar--item"
+               :class="page.classes"
+               @click="closeSidebar"
+            >
                <Icon :icon="page.icon" class="text-2xl" />
                <span>{{ page.name }}</span>
             </RouterLink>

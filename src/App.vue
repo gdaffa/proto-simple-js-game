@@ -7,8 +7,15 @@ import SidebarLayout from '@/layouts/SidebarLayout.vue'
 
 const isSidebarOpen = ref(false)
 
-function toggleSidebar() {
-   isSidebarOpen.value = !isSidebarOpen.value
+// =============================================================================
+
+/**
+ * Toggle sidebar open state, can be change explicitly by `to` parameter.
+ *
+ * @param {boolean?} to
+ */
+function toggleSidebar(to = null) {
+   isSidebarOpen.value = to ?? !isSidebarOpen.value
 }
 
 // =============================================================================
